@@ -1,0 +1,43 @@
+datasource db {
+  provider = "postgresql"
+  // for local db for faster development
+  url = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model users {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  items    items[]
+  posts    posts[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model items {
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     Int
+  description String?
+  owner    users    @relation(fields: [ownerId], references: [id])
+  ownerId  Int
+  quantity Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model posts {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  author    users     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}

@@ -1,0 +1,248 @@
+@import '@/styles/variables.module.scss';
+
+#__next {
+  height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-decoration: none;
+  list-style: none;
+}
+
+body {
+  background-color: $main-color;
+  font-family: $font-description;
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+.splash-main-cont {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+  flex-direction: column;
+}
+
+.main-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  .main-card {
+    background-color: $card-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    flex-direction: column;
+    padding: 3.125rem 2.5rem;
+    height: 80%;
+  }
+}
+
+.icon-chibi {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.chibi-img {
+  width: 100%;
+  height: 100%;
+}
+
+.social {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.twitter,
+.instagram,
+.twitch,
+.tiktok {
+  color: $main-color;
+  font-size: 1.3rem;
+}
+
+.beni-name-cont > h2 {
+  color: $secondary-color;
+  font-family: $font-name;
+  font-weight: bold;
+  margin: 1rem 0;
+  text-align: center;
+  letter-spacing: 0.1rem;
+  font-size: 1.125rem;
+}
+
+.beni-name-cont > p {
+  color: $description-color;
+  font-family: $font-description;
+  margin-top: 20px;
+  text-align: center;
+  letter-spacing: 3px;
+  font-size: 0.625rem;
+}
+
+.comms-prices-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 10px;
+}
+
+.comms-prices-container button {
+  padding: 20px!important;
+}
+
+.waitlist-kofi-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 10px;
+}
+
+.btn {
+  display: flex;
+  width: 10rem;
+  height: 2.5rem;
+  padding: 0 0.5rem;
+  vertical-align: middle;
+  text-transform: uppercase;
+  font-family: $font-description;
+  letter-spacing: 0.1rem;
+  padding-left: calc(0.1rem + 0.5rem);
+  font-size: 0.625rem;
+  font-weight: 400;
+  border-radius: 1.25rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  color: $card-color;
+  text-align: center;
+}
+
+.btn a {
+  color: white;
+}
+
+.btn a:hover {
+  color: red !important;
+}
+
+.btn:hover {
+  cursor: pointer;
+  color: red;
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: $main-color;
+  margin-top: 1rem;
+  opacity: 80%;
+}
+
+.navbar {
+  // chage position to fixed after initial layout
+  position: static;
+  width: 100%;
+  border: 1px solid red;
+  padding: 2rem 0;
+
+  .links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-ul {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+    padding-right: 0.5rem;
+    // padding-top: 0.5rem;
+
+    a {
+      color: #fff;
+
+      &:hover {
+        color: red;
+      }
+    }
+  }
+}
+
+.google-login-btn {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  /* border: 1px solid #d3d3d3; */
+  border-radius: 50%;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-btn:hover {
+  background-color: #f3f3f3;
+  cursor: pointer;
+}
+
+.google-icon {
+  /* color: red; */
+  font-size: 2rem;
+}
+
+.google-icon:hover {
+  color: red;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 1rem;
+}
+
+.form-title {
+  color: $secondary-color;
+  margin: 1rem 0;
+}
+
+#username,
+#password,
+#email {
+  width: 100%;
+  height: 2rem;
+  padding: 0.5rem;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  font-family: $font-name;
+}
+
+.button-cont {
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  background-color: $main-color;
+}
+
+.btn-secondary {
+  background-color: $secondary-color;
+}

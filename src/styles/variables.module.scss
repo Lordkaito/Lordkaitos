@@ -1,0 +1,15 @@
+// only variables here just like:
+/* $color-blue: #105cc0; */
+
+// so then in the global.scss you can do:
+/* @import 'name/to/dir';
+.customClass {
+  color: $color-blue;
+} */
+
+$main-color: #ffb78f;
+$secondary-color: #c4c172;
+$description-color: #d47b5f;
+$font-name: "Source Sans Pro", sans-serif;
+$font-description: "Sora", sans-serif;
+$card-color: #ffffffed;
