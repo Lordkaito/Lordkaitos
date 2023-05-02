@@ -27,6 +27,7 @@ model items {
   owner    users    @relation(fields: [ownerId], references: [id])
   ownerId  Int
   quantity Int?
+  unlimited Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }

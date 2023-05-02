@@ -36,17 +36,48 @@ type Message = {
  * It is of type `NextApiResponse<Message>`, which means it is an object that has methods for sending
  * different types of responses (e.g. JSON, HTML, text) and a generic type `Message
  */
+// export default async function create(
+//   req: NextApiRequest,
+//   res: NextApiResponse<Message>
+// ) {
+//   console.log("req.body", req.body);
+//   const { name, description, price, quantity, unlimited } = JSON.parse(req.body);
+//   const item = await Item.create(
+//     User,
+//     name,
+//     description,
+//     price,
+//     unlimited,
+//     quantity,
+//   );
+//   if (item) {
+//     return res.status(201).json({ message: "ok" });
+//   }
+// }
+
 export default async function create(
   req: NextApiRequest,
   res: NextApiResponse<Message>
 ) {
-  const { name, description, price, quantity, image } = JSON.parse(req.body);
-  const item = await Item.create(
-    { id: 1, name: User.name },
+  const {
+    userEmail,
+    username,
+    userId,
     name,
     description,
     price,
-    quantity
+    unlimited,
+    quantity,
+  } = JSON.parse(req.body);
+  const item = await Item.create(
+    userId,
+    userEmail,
+    username,
+    name,
+    description,
+    price,
+    unlimited,
+    quantity,
   );
   if (item) {
     return res.status(201).json({ message: "ok" });

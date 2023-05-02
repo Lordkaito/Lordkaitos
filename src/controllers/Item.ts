@@ -9,6 +9,7 @@ import prisma from "../../lib/prisma";
 type User = {
   id: number;
   name: string;
+  email: string;
 };
 
 export default class Item {
@@ -73,22 +74,48 @@ export default class Item {
    * available.
    * @returns The `create` function is returning the newly created `item` object.
    */
+  // static async create(
+  //   user: User,
+  //   name: string,
+  //   description: string,
+  //   price: number,
+  //   unlimited: boolean,
+  //   quantity?: number, // this number will be -1 if the user says this will be infinite
+  // ) {
+  //   const item = await prisma.items.create({
+  //     data: {
+  //       description: description,
+  //       name: name,
+  //       owner: {
+  //         connect: { id: user.id },
+  //       },
+  //       price: price,
+  //       quantity: quantity,
+  //     },
+  //   });
+  //   return item;
+  // }
+
   static async create(
-    user: User,
+    userId: number,
+    userEmail: string,
+    username: string,
     name: string,
     description: string,
     price: number,
-    quantity?: number // this number will be -1 if the user says this will be infinite
+    unlimited: boolean, // this number will be -1 if the user says this will be infinite
+    quantity?: number
   ) {
     const item = await prisma.items.create({
       data: {
         description: description,
         name: name,
         owner: {
-          connect: { id: user.id },
+          connect: { id: userId },
         },
         price: price,
         quantity: quantity,
+        unlimited: unlimited,
       },
     });
     return item;

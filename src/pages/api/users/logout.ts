@@ -16,7 +16,7 @@ type Message = {
   token? : string
 };
 
-export default async function login(
+export default async function logout(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {

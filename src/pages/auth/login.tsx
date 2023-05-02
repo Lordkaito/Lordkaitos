@@ -7,13 +7,17 @@ import Image from "next/image";
 import Cookies from "js-cookie";
 import Router from "next/router";
 import { FormEvent } from "react";
+import { inject, observer } from "mobx-react";
+import appStore from "../../../stores/appStore";
 
-const LoginScreen = () => {
+const LoginScreen = observer(() => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLogged, setIsLogged] = useState(false);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    appStore.setIsLoggedIn(true);
     let logIn = await fetch("/api/users/login", {
       method: "POST",
       body: JSON.stringify({
@@ -22,17 +26,22 @@ const LoginScreen = () => {
       }),
     });
     let logInJson = await logIn.json();
-    Cookies.set("sessionToken", logInJson.token, {
-      expires: 7,
-      sameSite: "lax",
+    appStore.setUser({
+      userId: Number(logInJson.user.id),
+      userEmail: logInJson.user.email,
+      username: logInJson.user.name,
     });
 
-    if(logInJson.message === "ok") {
+    if (logInJson.message === "ok") {
+      Cookies.set("sessionToken", logInJson.token, {
+        expires: 7,
+        sameSite: "lax",
+      });
       Cookies.set("email", email, {
         expires: 7,
-        sameSite: "lax"
-      })
-      Cookies.set("logged", "true", {})
+        sameSite: "lax",
+      });
+      // Cookies.set("logged", "true", {})
     }
     // obviously we need to change this and apply a proper validation handler
     if (logInJson.message == "error no user found") {
@@ -40,15 +49,16 @@ const LoginScreen = () => {
     } else {
       Router.push("/home");
     }
+    setIsLogged(true);
   };
 
   const redirectToSignUp = () => {
     Router.push("/auth/signup");
-  }
+  };
 
   return (
     <>
-      <Navbar />
+      <Navbar isLogged={isLogged} />
       <div className="splash-main-cont">
         <section className="main-container">
           <div className="main-card">
@@ -87,7 +97,11 @@ const LoginScreen = () => {
                   </button>
                 </div>
                 <div className="result">
-                  <button type="button" onClick={redirectToSignUp} className="btn btn-secondary">
+                  <button
+                    type="button"
+                    onClick={redirectToSignUp}
+                    className="btn btn-secondary"
+                  >
                     Sign Up
                   </button>
                 </div>
@@ -102,7 +116,7 @@ const LoginScreen = () => {
       </div>
     </>
   );
-};
+});
 
 // **CHECK FRAMER MOTION FRAMEWORK FOR ANIMATIONS**
 
