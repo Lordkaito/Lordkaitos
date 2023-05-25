@@ -5,12 +5,20 @@
  * headers, query parameters, and request body.
  * @param res - `res` is the response object that will be sent back to the client making the request.
  * It contains methods for setting the response status, headers, and body. In this case, the response
- * body will be of type `Message`, which includes a message string and optional `user` and `token
+ * body will be of type `Message`, which includes a message string and optional `user` and `token`
  */
 import type { NextApiRequest, NextApiResponse } from "next";
 import User from "@/controllers/User";
 import Item from "@/controllers/Item";
-import jwt, { Secret } from "jsonwebtoken";
+import formidable from "formidable";
+import fs from "fs";
+// import a from "../../../../public/uploads"
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 type Data = {
   user?: User;
@@ -24,6 +32,7 @@ type Message = {
   message: string;
   user?: User;
   item?: Item;
+  error?: string;
 };
 
 /**
@@ -36,50 +45,57 @@ type Message = {
  * It is of type `NextApiResponse<Message>`, which means it is an object that has methods for sending
  * different types of responses (e.g. JSON, HTML, text) and a generic type `Message
  */
-// export default async function create(
-//   req: NextApiRequest,
-//   res: NextApiResponse<Message>
-// ) {
-//   console.log("req.body", req.body);
-//   const { name, description, price, quantity, unlimited } = JSON.parse(req.body);
-//   const item = await Item.create(
-//     User,
-//     name,
-//     description,
-//     price,
-//     unlimited,
-//     quantity,
-//   );
-//   if (item) {
-//     return res.status(201).json({ message: "ok" });
-//   }
-// }
 
 export default async function create(
   req: NextApiRequest,
   res: NextApiResponse<Message>
 ) {
-  const {
-    userEmail,
-    username,
-    userId,
-    name,
-    description,
-    price,
-    unlimited,
-    quantity,
-  } = JSON.parse(req.body);
-  const item = await Item.create(
-    userId,
-    userEmail,
-    username,
-    name,
-    description,
-    price,
-    unlimited,
-    quantity,
-  );
-  if (item) {
-    return res.status(201).json({ message: "ok" });
-  }
+  const form = new formidable.IncomingForm({ uploadDir: "./public/uploads" });
+
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+
+    const { image } = files;
+
+    if (!image) {
+      return res
+        .status(400)
+        .json({ message: "No se ha enviado ninguna imagen" });
+    }
+
+    const {
+      userEmail,
+      username,
+      userId,
+      name,
+      description,
+      price,
+      unlimited,
+      quantity,
+    } = fields;
+    console.log(image)
+
+    const filePath = `./public/uploads/${name}.png`;
+    fs.renameSync(image.filepath, filePath);
+
+    const item = await Item.create(
+      Number(userId),
+      userEmail.toString(),
+      username.toString(),
+      name.toString(),
+      description.toString(),
+      Number(price),
+      Boolean(unlimited),
+      Number(quantity),
+      filePath
+    );
+
+    if (item) {
+      return res.status(200).json({ message: "Item created" });
+    }
+
+    return res.status(500).json({ message: "Error creating item" });
+  });
 }

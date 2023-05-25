@@ -28,6 +28,7 @@ model items {
   ownerId  Int
   quantity Int?
   unlimited Boolean @default(true)
+  image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }
