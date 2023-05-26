@@ -44,8 +44,8 @@ export default class Item {
 
   static async create(
     userId: number,
-    userEmail: string,
-    username: string,
+    userEmail: string, // may go unused
+    username: string, // may go unused
     name: string,
     description: string,
     price: number,
@@ -53,19 +53,24 @@ export default class Item {
     quantity?: number,
     image?: string,
   ) {
-    const item = await prisma.items.create({
-      data: {
-        description: description,
-        name: name,
-        owner: {
-          connect: { id: userId },
+    try {
+      const item = await prisma.items.create({
+        data: {
+          description: description,
+          name: name,
+          owner: {
+            connect: { id: userId },
+          },
+          price: price,
+          quantity: quantity,
+          unlimited: unlimited,
+          image: image,
         },
-        price: price,
-        quantity: quantity,
-        unlimited: unlimited,
-        image: image,
-      },
-    });
-    return item;
+      });
+      return item;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error creating item");
+    }
   }
 }

@@ -15,6 +15,7 @@ model users {
   name      String
   items    items[]
   posts    posts[]
+  image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }

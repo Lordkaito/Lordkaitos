@@ -42,42 +42,62 @@ export default class Post {
     image: string,
     published: boolean
   ) {
-    const post = await prisma.posts.create({
-      data: {
-        content: content,
-        title: title,
-        author: {
-          connect: { id: user.id },
+    try {
+      const post = await prisma.posts.create({
+        data: {
+          content: content,
+          title: title,
+          author: {
+            connect: { id: user.id },
+          },
         },
-      },
-    });
-    return post;
+      });
+      return post;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error creating post");
+    }
   }
 
   static async destroy(id: number) {
-    const post = await prisma.posts.delete({
-      where: {
-        id: id,
-      },
-    });
-    return post;
+    try {
+      const post = await prisma.posts.delete({
+        where: {
+          id: id,
+        },
+      });
+      return post;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error deleting post");
+    }
   }
 
   static async get(username: string, id: number) {
-    const post = await prisma.posts.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    return post;
+    try {
+      const post = await prisma.posts.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      return post;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error getting post");
+    }
   }
 
   static async getAll(userId: number) {
-    const posts = await prisma.posts.findMany({
-      where: {
-        authorId: userId,
-      },
-    });
-    return posts;
+    try {
+      const posts = await prisma.posts.findMany({
+        where: {
+          authorId: userId,
+        },
+      });
+      return posts;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error getting posts");
+    }
   }
 }

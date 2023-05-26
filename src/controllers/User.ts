@@ -1,5 +1,5 @@
 import prisma from "../../lib/prisma";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 // import Cookies from "js-cookie";
 
 export default class User {
@@ -19,74 +19,106 @@ export default class User {
   }
 
   static async isLoggedIn(token: string) {
-    const jwtSecret = process.env.JWT_SECRET!
-    if(!token) {
-      return false
-    }
-
-    if(token) {
-      const decodedToken = jwt.verify(token, jwtSecret) as { userId: number, exp: number}
-      if(decodedToken.exp < Date.now() / 1000) {
-        return false
+    try {
+      const jwtSecret = process.env.JWT_SECRET!;
+      if (!token) {
+        return false;
       }
+
+      if (token) {
+        const decodedToken = jwt.verify(token, jwtSecret) as {
+          userId: number;
+          exp: number;
+        };
+        if (decodedToken.exp < Date.now() / 1000) {
+          return false;
+        }
+      }
+    } catch (error) {
+      throw new Error("Error verifying token");
     }
 
-    return true
+    return true;
   }
 
   static async login(email: string, password: string) {
     // Get user from database
-    const user = await prisma.users.findFirst({
-      where: {
-        email: email,
-        // we may include this later
-        // password: password
-      },
-    });
+    try {
+      const user = await prisma.users.findFirst({
+        where: {
+          email: email,
+          // we may include this later
+          // password: password
+        },
+      });
+      if (user && user.password === password) {
+        return user;
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error logging in");
+    }
 
     // Check password
-    if (user && user.password === password) {
-      return user;
-    }
     return null;
   }
 
   static async logout(email: string, loginStatus: boolean) {
+    try {
+      const user = await prisma.users.findFirst({
+        where: {
+          email: email,
+          // we may include this later
+          // password: password
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error logging out");
+    }
     // Get user from database
-    const user = await prisma.users.findFirst({
-      where: {
-        email: email,
-        // we may include this later
-        // password: password
-      },
-    });
 
     return null;
   }
 
   static async getAll() {
-    const users = await prisma.users.findMany();
-    return users;
+    try {
+      const users = await prisma.users.findMany();
+      return users;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error getting users");
+    }
   }
 
   static async getById(id: number) {
-    const user = await prisma.users.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    return user;
+    try {
+      const user = await prisma.users.findUnique({
+        where: {
+          id: id,
+        },
+      });
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error getting user");
+    }
   }
 
   static async create(name: string, email: string, password: string) {
-    const user = await prisma.users.create({
-      data: {
-        name: name,
-        email: email,
-        password: password,
-      },
-    });
-    return user;
+    try {
+      const user = await prisma.users.create({
+        data: {
+          name: name,
+          email: email,
+          password: password,
+        },
+      });
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error creating user");
+    }
   }
 
   static async createMany() {
@@ -104,5 +136,23 @@ export default class User {
         },
       ],
     });
+  }
+
+  static async addProfileImage(userId: string, image: string) {
+    try {
+      console.log("addProfileImage");
+      const userImage = await prisma.users.update({
+        where: {
+          id: parseInt(userId),
+        },
+        data: {
+          image: image,
+        },
+      });
+      return userImage;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error adding profile image");
+    }
   }
 }
