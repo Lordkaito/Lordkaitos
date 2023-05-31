@@ -26,6 +26,7 @@ const LoginScreen = observer(() => {
       }),
     });
     let logInJson = await logIn.json();
+    console.log(logInJson);
     appStore.setUser({
       userId: Number(logInJson.user.id),
       userEmail: logInJson.user.email,
@@ -47,7 +48,7 @@ const LoginScreen = observer(() => {
     if (logInJson.message == "error no user found") {
       alert("wrong credentials, please fix that");
     } else {
-      Router.push("/home");
+      Router.push("/userhome");
     }
     setIsLogged(true);
   };

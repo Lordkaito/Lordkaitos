@@ -3,6 +3,9 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 // import "../assets/styles/SplashScreen.css";
 import Button from "@/components/Button";
+
+// WELCOME-SPLASH PAGE //
+
 const SplashScreen = () => {
   return (
     <>

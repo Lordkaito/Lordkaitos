@@ -58,6 +58,7 @@ export default async function create(
       } = fields;
 
       const destinationDir = "./public/uploads";
+      // @ts-ignore
       const originalFilename = image.originalFilename; // this is not a real error, only linter
       const extension = path.extname(originalFilename);
       const filename = `item-${userId}-${name}${extension}`;
@@ -70,6 +71,7 @@ export default async function create(
         filePath = path.join(destinationDir, newFilename);
         index++;
       }
+      // @ts-ignore
       fs.renameSync(image.filepath, path.join(destinationDir, newFilename)); // this is not a real error, only linter
 
       const item = await Item.create(

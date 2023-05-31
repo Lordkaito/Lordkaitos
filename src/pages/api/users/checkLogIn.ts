@@ -16,7 +16,7 @@ export default async function checkLogIn(
   const { token } = JSON.parse(req.body);
   const isLoggedIn = await User.isLoggedIn(token);
   if (isLoggedIn) {
-    res.status(200).redirect("/home");
+    res.status(200);
   } else {
     res.status(200).json({ message: "Token expired" });
   }

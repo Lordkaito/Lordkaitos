@@ -140,10 +140,15 @@ export default class User {
 
   static async addProfileImage(userId: string, image: string) {
     try {
-      console.log("addProfileImage");
+      const getUser = await prisma.users.findUnique({
+        where: {
+          id: Number(userId),
+        },
+      });
+      console.log(image, 'image');
       const userImage = await prisma.users.update({
         where: {
-          id: parseInt(userId),
+          id: Number(userId),
         },
         data: {
           image: image,
