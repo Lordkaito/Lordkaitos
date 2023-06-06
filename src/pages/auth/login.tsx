@@ -48,7 +48,7 @@ const LoginScreen = observer(() => {
     if (logInJson.message == "error no user found") {
       alert("wrong credentials, please fix that");
     } else {
-      Router.push("/userhome");
+      Router.push("/home");
     }
     setIsLogged(true);
   };

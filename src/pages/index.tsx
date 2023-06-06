@@ -3,10 +3,36 @@ import Navbar from "@/components/Navbar";
 import Image from "next/image";
 // import "../assets/styles/SplashScreen.css";
 import Button from "@/components/Button";
+import Cookies from "js-cookie";
+import Router from "next/router";
+import { useEffect, useState } from "react";
+import appStore from "../../stores/appStore";
 
 // WELCOME-SPLASH PAGE //
 
 const SplashScreen = () => {
+  const [userIdFromStore, setUserIdFromStore] = useState(0);
+  const token = Cookies.get("sessionToken") || null;
+  // useEffect(() => {
+  //   console.log(token, "token");
+  //   setUserIdFromStore(appStore.user.userId);
+  //   if (token !== null) {
+  //     fetch("/api/users/checkLogIn", {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         token: token,
+  //       }),
+  //     }).then((res) => {
+  //       if (res.status === 200) {
+  //         Router.push("/home");
+  //       } else {
+  //         Router.push("/auth/login");
+  //       }
+  //     });
+  //   } else {
+  //     Router.push("/auth/login");
+  //   }
+  // }, [token]);
   return (
     <>
       <Navbar />
@@ -35,23 +61,13 @@ const SplashScreen = () => {
               <p className="name-description">♡ ILLUSTRATOR & EMOTE ARTIST ♡</p>
             </div>
             <div className="comms-prices-container">
-              <Button
-                text="Commission form"
-              />
-              <Button
-                text="Prices"
-              />
+              <Button text="Commission form" />
+              <Button text="Prices" />
             </div>
             <div className="waitlist-kofi-container">
-              <Button
-                text="KO-FI"
-              />
-              <Button
-                text="Waitlist"
-              />
-              <Button
-                text="T.O.S"
-              />
+              <Button text="KO-FI" />
+              <Button text="Waitlist" />
+              <Button text="T.O.S" />
             </div>
             <footer className="footer-container">
               <div className="footer-text">(Made with ❤️ by Beniarts)</div>

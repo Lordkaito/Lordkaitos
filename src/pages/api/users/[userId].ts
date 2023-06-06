@@ -26,7 +26,6 @@ export default async function profileImage(
   res: NextApiResponse<Message>
 ) {
   const user = await User.getById(Number(req.query.userId));
-  console.log(user);
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }

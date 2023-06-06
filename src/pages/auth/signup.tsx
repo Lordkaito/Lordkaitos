@@ -58,7 +58,6 @@ const SignUp = () => {
 
     if (signUpJson.message === "User created") {
       const res = await logInNewUser();
-      console.log(res);
       if (res.message === "ok") {
         Cookies.set("sessionToken", res.token, {
           expires: 7,

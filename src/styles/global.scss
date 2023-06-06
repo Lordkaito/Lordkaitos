@@ -1,4 +1,4 @@
-@import '@/styles/variables.module.scss';
+@import "@/styles/variables.module.scss";
 
 #__next {
   height: 100vh;
@@ -20,8 +20,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
-
 
 .splash-main-cont {
   display: flex;
@@ -100,7 +98,7 @@ body {
 }
 
 .comms-prices-container button {
-  padding: 20px!important;
+  padding: 20px !important;
 }
 
 .waitlist-kofi-container {
@@ -162,6 +160,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    a {
+      color: #fff;
+
+      &:hover {
+        color: red;
+      }
+    }
   }
 
   .nav-ul {

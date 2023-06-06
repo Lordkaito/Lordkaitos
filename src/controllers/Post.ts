@@ -13,40 +13,26 @@ type User = {
 
 export default class Post {
   id: number;
-  title: string;
   content: string;
-  author: string;
-  authorId: number;
   published: boolean;
 
-  constructor(
-    id: number,
-    title: string,
-    content: string,
-    author: string,
-    authorId: number,
-    published: boolean
-  ) {
+  constructor(id: number, content: string, published: boolean) {
     this.id = id;
-    this.title = title;
     this.content = content;
-    this.author = author;
-    this.authorId = authorId;
     this.published = published;
   }
 
   static async create(
     user: User,
-    title: string,
     content: string,
-    image: string,
-    published: boolean
+    image?: string,
+    published: boolean = true
   ) {
     try {
       const post = await prisma.posts.create({
         data: {
           content: content,
-          title: title,
+          published: published,
           author: {
             connect: { id: user.id },
           },

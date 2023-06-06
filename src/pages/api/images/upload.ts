@@ -1,4 +1,3 @@
-// import { IncomingForm, Fields, Files } from 'formidable';
 import { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import fs from "fs";
@@ -31,9 +30,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // }
 
 
-
     res
-      .status(200)
+    .status(200)
+    // @ts-ignore
       .json({ image: image, path: image._writeStream.path });
   });
 };

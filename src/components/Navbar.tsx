@@ -10,8 +10,8 @@ interface NavbarProps {
 }
 
 const Navbar = observer((props: NavbarProps) => {
-  console.log(appStore.isLoggedIn);
-  const token = Cookies.get("sessionToken") || "";
+  const token = Cookies.get("sessionToken") || null;
+  console.log(appStore.isLoggedIn)
   const hanleLogout = () => {
     appStore.setIsLoggedIn(false);
     Cookies.remove("sessionToken");
@@ -21,12 +21,16 @@ const Navbar = observer((props: NavbarProps) => {
   return (
     <nav className="navbar">
       <div className="links">
-        <div className="logo">Lordkaito&apos;s</div>
+        <Link href={"/home"} className="link">Lordkaito's</Link>
         {/* we will need to add an icon menu for smaller screens */}
 
         <ul className="nav-ul">
           <li className="link home-link">
-            <Link href="/home">Home</Link>
+            {appStore.isLoggedIn ? (
+              <Link href="/home">Home</Link>
+            ) : (
+              <Link href="/auth/signup">Sign Up</Link>
+            )}
           </li>
           <li className="link login-link">
             {appStore.isLoggedIn ? (

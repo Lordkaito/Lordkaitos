@@ -36,8 +36,8 @@ model items {
 
 model posts {
   id        Int      @id @default(autoincrement())
-  title     String
   content   String
+  image     String?
   author    users     @relation(fields: [authorId], references: [id])
   authorId  Int
   published Boolean  @default(false)

@@ -35,3 +35,7 @@ class AppStore {
 const appStore = new AppStore();
 
 export default appStore;
+
+
+// this helps when you move between pages, but not when you refresh the page, basically because that is not the purpose of state management
+// in order to manage login states or any kind of information that we need to persist even after reloading, we will need to use cookies or any database call with tokens or similar

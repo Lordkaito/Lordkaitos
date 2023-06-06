@@ -5,14 +5,16 @@ import { useEffect, useState } from "react";
 import { FormEvent } from "react";
 import appStore from "../../stores/appStore";
 import { useRef } from "react";
-import { observer } from "mobx-react";
-import Image from "next/image";
+import { inject, observer } from "mobx-react";
+// import { useLoginValidation } from "@/hooks/useLoginValidation";
 
-const userHome = observer(() => {
-  const [userImage, setUserImage] = useState("");
+const Home = observer(() => {
+  const token = Cookies.get("sessionToken") || null;
+  // const { isLoggedIn, checkLogIn } = useLoginValidation();
+  const [userIdFromStore, setUserIdFromStore] = useState(0);
+
   // SHALL THIS PAGE CONTAIN POSTS AS WELL? //
 
-  const token = Cookies.get("sessionToken") || "";
   const [isLoading, setIsLoading] = useState(false);
 
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -50,7 +52,7 @@ const userHome = observer(() => {
 
       setIsLoading(true);
 
-      fetch("/api/users/profileImage", {
+      fetch("/api/items/create", {
         method: "POST",
         body: formData,
       })
@@ -89,22 +91,10 @@ const userHome = observer(() => {
     // console.log(newItemJson)
   };
 
-  const getUserImage = async () => {
-    const userImage = await fetch(`/api/users/${appStore.user.userId}`);
-    const userImageJson = await userImage.json();
-    console.log(userImageJson);
-    const path = `/uploads/${userImageJson.image}`;
-    setUserImage(path);
-  };
-
   // this function will allow us to control the user login with the token
   useEffect(() => {
-    // get user image from the database
-    getUserImage();
-
-    console.log(appStore.user.userId);
-
-    if (token !== "undefined") {
+    setUserIdFromStore(appStore.user.userId);
+    if (token !== null) {
       fetch("/api/users/checkLogIn", {
         method: "POST",
         body: JSON.stringify({
@@ -112,7 +102,7 @@ const userHome = observer(() => {
         }),
       }).then((res) => {
         if (res.status === 200) {
-          Router.push("/userhome");
+          Router.push("/home");
         } else {
           Router.push("/auth/login");
         }
@@ -135,6 +125,26 @@ const userHome = observer(() => {
       This is the home screen
       <div>
         <div>
+          <label>Nombre:</label>
+          <input type="text" ref={inputTextRefs.name} />
+        </div>
+        <div>
+          <label>Descripción:</label>
+          <input type="text" ref={inputTextRefs.description} />
+        </div>
+        <div>
+          <label>Precio:</label>
+          <input type="number" ref={inputTextRefs.price} />
+        </div>
+        <div>
+          <label>Cantidad:</label>
+          <input type="number" ref={inputTextRefs.quantity} />
+        </div>
+        <div>
+          <label>Disponible:</label>
+          <input type="checkbox" ref={inputTextRefs.unlimited} />
+        </div>
+        <div>
           <label>Imagen:</label>
           <input type="file" ref={inputFileRef} onChange={handleFileChange} />
         </div>
@@ -142,13 +152,10 @@ const userHome = observer(() => {
           {/* {isLoading ? "Subiendo imagen..." : "Subir imagen"} */}click
         </button>
       </div>
-      <div>
-        <Image src={userImage} alt="none" width={100} height={100}></Image>
-      </div>
     </>
   );
 });
 
 //this is the main page for those who has been logged in (user home screen)
 
-export default userHome;
+export default Home;

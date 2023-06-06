@@ -31,7 +31,7 @@ export default async function login(
     return res.status(200).json({ message: "ok", user: user, token: token });
     // return {user: user, token: token}
   } else {
-    res.status(401).json({
+    return res.status(401).json({
       message: "error no user found"
     });
   }
