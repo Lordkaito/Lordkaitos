@@ -74,8 +74,13 @@ export default class Post {
   }
 
   static async getAll(userId: number) {
+    console.log(userId, 'post model');
     try {
       const posts = await prisma.posts.findMany({
+        take: 20,
+        orderBy: {
+          createdAt: "desc",
+        },
         where: {
           authorId: userId,
         },

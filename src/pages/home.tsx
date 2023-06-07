@@ -7,13 +7,17 @@ import appStore from "../../stores/appStore";
 import { useRef } from "react";
 import { observer } from "mobx-react";
 import Image from "next/image";
+import { set } from "mobx";
+import Post from "@/controllers/Post";
 
 const Home = observer(() => {
-  console.log(appStore.user);
   const [userImage, setUserImage] = useState("");
 
   const token = Cookies.get("sessionToken") || null;
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [inputValue, setInputValue] = useState("");
 
   const inputFileRef = useRef<HTMLInputElement>(null);
   const inputTextRefs = {
@@ -21,7 +25,7 @@ const Home = observer(() => {
     post: useRef<HTMLInputElement>(null),
   };
 
-  const handleNewPost = (e: any) => {
+  const handleNewPost = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("userId", appStore.user?.userId.toString());
@@ -36,27 +40,47 @@ const Home = observer(() => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("attempt", data);
         setIsLoading(false);
+        getUserPosts();
       })
       .catch((error) => {
         console.error("error", error);
-        // Lógica adicional, como mostrar un mensaje de error, manejar errores, etc.
         setIsLoading(false);
+        getUserPosts();
       });
+    setInputValue("");
   };
 
   const getUserImage = async () => {
     const userImage = await fetch(`/api/users/${appStore.user.userId}`);
     const userImageJson = await userImage.json();
-    console.log(userImageJson);
     const path = `/uploads/${userImageJson.image}`;
     setUserImage(path);
   };
 
+  const getUserPosts = async () => {
+    const form = new FormData();
+    form.append("userId", appStore.user.userId.toString());
+    const userPosts = await fetch("api/posts/getAllForUser", {
+      method: "POST",
+      body: form,
+    }).then((res) =>
+      res.json().then((data) => {
+        if (data.posts !== posts) {
+          setPosts(data.posts);
+        }
+      })
+    );
+  };
+
+  // useEffect(() => {
+  //   if (appStore.user.userId !== null) {
+  //     getUserPosts();
+  //   }
+  // }, [posts]);
+
   // this function will allow us to control the user login with the token
   useEffect((): void => {
-    console.log(appStore.user.userId)
     // get user image from the database
     getUserImage();
 
@@ -68,12 +92,16 @@ const Home = observer(() => {
         }),
       }).then((res) => {
         if (res.status === 200) {
+          setIsLoggedIn(true);
           Router.push("/home");
         } else {
+          setIsLoggedIn(false);
           Router.push("/auth/login");
         }
       });
+      getUserPosts();
     } else {
+      setIsLoggedIn(false);
       Router.push("/auth/login");
     }
   }, [token]);
@@ -86,12 +114,21 @@ const Home = observer(() => {
     // Lógica adicional a realizar cuando el archivo cambia, si es necesario.
   };
 
+  const refreshPosts = async () => {
+    getUserPosts();
+  };
+
   const inputFileRefss = useRef<HTMLInputElement>(null);
 
   const handleClick = (e: FormEvent) => {
     e.preventDefault();
-    console.log("click");
     inputFileRefss.current?.click();
+  };
+
+  const handleInputContentChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setInputValue(event.target.value);
   };
   return (
     <>
@@ -105,11 +142,11 @@ const Home = observer(() => {
         <button onClick={handleFileUpload}>
           {isLoading ? "Subiendo imagen..." : "Subir imagen"}click
         </button> */}
-      <Navbar />
-      <main>
-        <aside>
+      <Navbar isLogged={isLoggedIn} />
+      <main id="main">
+        <aside className="aside-menu">
           <ul className="aside-navbar">
-            <li>Home</li>
+            <li onClick={refreshPosts}>Home</li>
             <li>Search</li>
             <li>Messages</li>
             <li>Shop</li>
@@ -117,14 +154,23 @@ const Home = observer(() => {
             <li>Settings</li>
           </ul>
         </aside>
-        <section>
+        <section className="main-posts">
           <div className="new-post">
             <form>
-              <input type="text" ref={inputTextRefs.post} />
+              <input
+                type="text"
+                ref={inputTextRefs.post}
+                value={inputValue}
+                onChange={handleInputContentChange}
+              />
               <div className="assets">
                 <ul className="post-assets-options">
                   <button onClick={(e) => handleClick(e)}>Image</button>
-                  <input type="file" style={{display: "none"}} ref={inputFileRefss} />
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    ref={inputFileRefss}
+                  />
                   <li>Video</li>
                   <li>Audio</li>
                   <li>File</li>
@@ -134,6 +180,22 @@ const Home = observer(() => {
                 {isLoading ? "Loading..." : "Post"}
               </button>
             </form>
+          </div>
+          <div className="posts">
+            {posts
+              ? posts.map((post: Post) => (
+                  <div>
+                    <div
+                      className="post"
+                      key={
+                        post.id
+                      } /*style={{display: post.published ? "block" : "none"}} we can do this later */
+                    >
+                      <p>{post.content}</p>
+                    </div>
+                  </div>
+                ))
+              : null}
           </div>
         </section>
       </main>

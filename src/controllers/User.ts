@@ -145,7 +145,6 @@ export default class User {
           id: Number(userId),
         },
       });
-      console.log(image, 'image');
       const userImage = await prisma.users.update({
         where: {
           id: Number(userId),

@@ -4,6 +4,7 @@ import Router from "next/router";
 import { useEffect, useState } from "react";
 import { inject, observer } from "mobx-react";
 import appStore from "../../stores/appStore";
+import { set } from "mobx";
 
 interface NavbarProps {
   isLogged?: boolean;
@@ -11,7 +12,29 @@ interface NavbarProps {
 
 const Navbar = observer((props: NavbarProps) => {
   const token = Cookies.get("sessionToken") || null;
-  console.log(appStore.isLoggedIn)
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // useEffect((): void => {
+
+  //   if (token !== null) {
+  //     fetch("/api/users/checkLogIn", {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         token: token,
+  //       }),
+  //     }).then((res) => {
+  //       if (res.status === 200) {
+  //         setIsLoggedIn(true);
+  //         // Router.push("/home");
+  //       } else {
+  //         setIsLoggedIn(false);
+  //         // Router.push("/auth/login");
+  //       }
+  //     });
+  //   } else {
+  //     // Router.push("/auth/login");
+  //     setIsLoggedIn(false);
+  //   }
+  // }, [token]);
   const hanleLogout = () => {
     appStore.setIsLoggedIn(false);
     Cookies.remove("sessionToken");
@@ -22,18 +45,17 @@ const Navbar = observer((props: NavbarProps) => {
     <nav className="navbar">
       <div className="links">
         <Link href={"/home"} className="link">Lordkaito's</Link>
-        {/* we will need to add an icon menu for smaller screens */}
 
         <ul className="nav-ul">
           <li className="link home-link">
-            {appStore.isLoggedIn ? (
+            {props.isLogged ? (
               <Link href="/home">Home</Link>
             ) : (
               <Link href="/auth/signup">Sign Up</Link>
             )}
           </li>
           <li className="link login-link">
-            {appStore.isLoggedIn ? (
+            {props.isLogged ? (
               <button onClick={hanleLogout}>Logout</button>
             ) : (
               <Link href="/auth/login">Login</Link>

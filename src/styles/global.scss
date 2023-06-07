@@ -153,7 +153,7 @@ body {
   // chage position to fixed after initial layout
   position: static;
   width: 100%;
-  border: 1px solid red;
+  // border: 1px solid red;
   padding: 2rem 0;
 
   .links {
@@ -251,4 +251,32 @@ body {
 
 .btn-secondary {
   background-color: $secondary-color;
+}
+
+#main {
+  display: flex;
+  // align-items: center;
+  // justify-content: center;
+  height: 100%;
+}
+
+.aside-menu {
+  border: 1px solid red;
+  width: 100%;
+  max-width: 300px;
+}
+
+.main-posts {
+  border: 1px solid blue;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  flex-direction: column;
+  // max-width: 900px;
+}
+
+.post {
+  border: 2px solid grey;
+  margin-bottom: 1rem;
 }
