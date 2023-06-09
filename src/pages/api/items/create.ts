@@ -53,6 +53,7 @@ export default async function create(
         name,
         description,
         price,
+        priceId,
         unlimited,
         quantity,
       } = fields;
@@ -81,6 +82,7 @@ export default async function create(
         name as string,
         description as string,
         Number(price),
+        priceId as string,
         Boolean(unlimited),
         Number(quantity),
         filePath

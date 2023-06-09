@@ -7,19 +7,23 @@ import appStore from "../../stores/appStore";
 import { useRef } from "react";
 import { observer } from "mobx-react";
 import Image from "next/image";
-import { set } from "mobx";
 import Post from "@/controllers/Post";
-
+import Link from "next/link";
+// import { PayPalButtons } from "@paypal/react-paypal-js";
+// import { loadStripe } from "@stripe/stripe-js";
+// import Stripe from "stripe";
+// const stripePromise = loadStripe("pk_test_51NGSM8IVk8RfOzXrPBAr8XI8saJat6UnUz65Py3alSaOQafwCdyWCxDR4dXO5JDeK3KI2i9mvND54jZBWePtO2KG00qn1WC7M1");
+// console.log(stripePromise);
 const Home = observer(() => {
-  const [userImage, setUserImage] = useState("");
-
   const token = Cookies.get("sessionToken") || null;
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [posts, setPosts] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [userImage, setUserImage] = useState("");
 
   const inputFileRef = useRef<HTMLInputElement>(null);
+
   const inputTextRefs = {
     name: useRef<HTMLInputElement>(null),
     post: useRef<HTMLInputElement>(null),
@@ -72,12 +76,6 @@ const Home = observer(() => {
       })
     );
   };
-
-  // useEffect(() => {
-  //   if (appStore.user.userId !== null) {
-  //     getUserPosts();
-  //   }
-  // }, [posts]);
 
   // this function will allow us to control the user login with the token
   useEffect((): void => {
@@ -145,13 +143,20 @@ const Home = observer(() => {
       <Navbar isLogged={isLoggedIn} />
       <main id="main">
         <aside className="aside-menu">
-          <ul className="aside-navbar">
-            <li onClick={refreshPosts}>Home</li>
-            <li>Search</li>
-            <li>Messages</li>
-            <li>Shop</li>
-            <li>Profile</li>
-            <li>Settings</li>
+          <ul
+            className="aside-navbar"
+            style={{ display: "flex", flexDirection: "column" }}
+          >
+            <button onClick={refreshPosts}>Home</button>
+            <button>Search</button>
+            <button>Messages</button>
+            <button>
+              <Link href={`/${appStore.user.userId}/shop`}>
+                Shopp
+              </Link>
+            </button>
+            <button>Profile</button>
+            <button>Settings</button>
           </ul>
         </aside>
         <section className="main-posts">
@@ -197,6 +202,8 @@ const Home = observer(() => {
                 ))
               : null}
           </div>
+          {/* <div id="paypal-button-container" className="paypal-button-container"></div> */}
+          {/* <PayPalButtons client-id={process.env.PAYPAL_CLIENT_ID} onInit={() => {console.log('asdads')}} /> */}
         </section>
       </main>
     </>

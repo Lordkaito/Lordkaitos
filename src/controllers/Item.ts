@@ -15,9 +15,10 @@ export const config = {
 export default class Item {
   id: number;
   name: string;
-  owner: string;
+  owner?: string;
   ownerId: number;
   price: number;
+  priceId?: string;
   quantity: number | string;
   description?: string;
   image?: string;
@@ -25,10 +26,11 @@ export default class Item {
   constructor(
     id: number,
     name: string,
-    owner: string,
     ownerId: number,
     price: number,
+    priceId: string,
     quantity: number,
+    owner?: string,
     description?: string,
     image?: string
   ) {
@@ -37,6 +39,7 @@ export default class Item {
     this.owner = owner;
     this.ownerId = ownerId;
     this.price = price;
+    this.priceId = priceId;
     this.quantity = quantity;
     this.description = description;
     this.image = image;
@@ -49,6 +52,7 @@ export default class Item {
     name: string,
     description: string,
     price: number,
+    priceId: string,
     unlimited: boolean, // this number will be -1 if the user says this will be infinite
     quantity?: number,
     image?: string,
@@ -71,6 +75,20 @@ export default class Item {
     } catch (error) {
       console.log(error);
       throw new Error("Error creating item");
+    }
+  }
+
+  static async getAll(userId: number) {
+    try {
+      const items = await prisma.items.findMany({
+        where: {
+          ownerId: userId,
+        },
+      });
+      return items;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error getting items");
     }
   }
 }

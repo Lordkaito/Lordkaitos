@@ -58,7 +58,6 @@ const Home = observer(() => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("Imagen subida:", data);
           // Lógica adicional, como mostrar un mensaje de éxito, actualizar la vista, etc.
           setIsLoading(false);
         })

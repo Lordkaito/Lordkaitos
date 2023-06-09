@@ -16,6 +16,7 @@ model users {
   items    items[]
   posts    posts[]
   image     String?
+  token     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }
@@ -27,6 +28,7 @@ model items {
   description String?
   owner    users    @relation(fields: [ownerId], references: [id])
   ownerId  Int
+  priceId  String?
   quantity Int?
   unlimited Boolean @default(true)
   image     String?

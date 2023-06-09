@@ -1,37 +1,41 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import User from "@/controllers/User";
-import Post from "@/controllers/Post";
+import Item from "@/controllers/Item";
 import formidable from "formidable";
 
 type Data = {
   user?: User;
-  price: number;
-  name: string;
+  // price: number;
+  // name: string;
   description?: string;
+  message?: string;
+  items?: Item[];
 };
 
 // provisionals
 type Message = {
   message: string;
   user?: User;
-  posts?: Post[];
+  items?: Item[];
 };
 
 export const config = {
   api: {
     bodyParser: false,
   },
-}
+};
 
-export default async function getAllForUser(
+export default async function getAll(
   req: NextApiRequest,
-  res: NextApiResponse<Message>
+  res: NextApiResponse<Data>
 ) {
+  console.log("req.query inside getAllForUser");
   // const request = JSON.stringify(req.body);
   const form = new formidable.IncomingForm();
   try {
     const { fields } = await new Promise<{ fields: formidable.Fields }>(
       (resolve, reject) => {
+        console.log(req.query, "req.query inside getAllForUser");
         form.parse(req, (err, fields, files) => {
           if (err) {
             reject(err);
@@ -42,12 +46,13 @@ export default async function getAllForUser(
       }
     );
     const { userId } = fields;
-    const posts = await Post.getAll(Number(userId));
-    if (posts) {
-      return res.status(201).json({ message: "ok", posts });
+    const items = await Item.getAll(Number(userId));
+    console.log(items, "items inside getAllForUser");
+    if (items) {
+      return res.status(201).json({ message: "ok", items: items as Item[] });
     }
-    return res.status(401).json({ message: "Error getting postsssss" });
+    return res.status(401).json({ message: "Error getting items" });
   } catch {
-    return res.status(401).json({ message: "Error getting posts" });
+    return res.status(401).json({ message: "Error getting itemssss" });
   }
 }

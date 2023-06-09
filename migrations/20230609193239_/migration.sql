@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "items" ALTER COLUMN "priceId" DROP NOT NULL,
+ALTER COLUMN "priceId" DROP DEFAULT;

@@ -26,7 +26,7 @@ const LoginScreen = observer(() => {
       }),
     });
     let logInJson = await logIn.json();
-    console.log(logInJson);
+    // console.log(logInJson);
     appStore.setUser({
       userId: Number(logInJson.user.id),
       userEmail: logInJson.user.email,
